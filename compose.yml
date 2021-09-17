@@ -5,9 +5,6 @@ services:
     restart: always
     ports:
       - 3000:3000
-    # networks:
-    #   - technet
-    #   - statnet
     volumes:
       - grafana:/data
   influxdb:
@@ -15,33 +12,25 @@ services:
     restart: always
     expose:
       - "8086"
-    # networks:
-    #   - statnet
     volumes:
-      - influxdb:/data
+      - influxdb2:/var/lib/influxdb2
     environment:
-      - INFLUXDB_DB=telegraf
-      - INFLUXDB_USER=telegraf
-      - INFLUXDB_ADMIN_ENABLED=true
-
-      - INFLUXDB_ADMIN_USER=admin
-      - INFLUXDB_ADMIN_PASSWORD=Radio!Station 
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=nodered
+      - DOCKER_INFLUXDB_INIT_PASSWORD=nodered
+      - DOCKER_INFLUXDB_INIT_ORG=local.docker.nodered.station
+      - DOCKER_INFLUXDB_INIT_BUCKET=station_bucker
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token-station
   nodered:
     build: .
     ports:
       - 1880:1880
-    # networks:
-    #   - technet
-    #   - statnet
     volumes:
-      - .:/data
-# networks:
-#   technet:
-#   statnet:
+      - nodered:/data
 volumes:
   nodered:
     external: true
   grafana:
     external: true
-  influxdb:
+  influxdb2:
     external: true
