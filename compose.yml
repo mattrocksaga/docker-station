@@ -5,9 +5,9 @@ services:
     restart: always
     ports:
       - 3000:3000
-    networks:
-      - technet
-      - statnet
+    # networks:
+    #   - technet
+    #   - statnet
     volumes:
       - grafana:/data
   influxdb:
@@ -15,8 +15,8 @@ services:
     restart: always
     expose:
       - "8086"
-    networks:
-      - statnet
+    # networks:
+    #   - statnet
     volumes:
       - influxdb:/data
     environment:
@@ -30,14 +30,14 @@ services:
     build: .
     ports:
       - 1880:1880
-    networks:
-      - technet
-      - statnet
+    # networks:
+    #   - technet
+    #   - statnet
     volumes:
-      - nodered:/data
-networks:
-  technet:
-  statnet:
+      - .:/data
+# networks:
+#   technet:
+#   statnet:
 volumes:
   nodered:
     external: true
