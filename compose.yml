@@ -21,10 +21,14 @@ services:
       - DOCKER_INFLUXDB_INIT_ORG=local.docker.nodered.station
       - DOCKER_INFLUXDB_INIT_BUCKET=station_bucket
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token-station
-  nodered:
-    build: .
+  node-red:
+    image: nodered/node-red:latest
+    environment:
+      - TZ=America/Chicago
     ports:
-      - 1880:1880
+      - "1880:1880"
+    networks:
+      - node-red-net
     volumes:
       - ./nodered:/data
 volumes:
