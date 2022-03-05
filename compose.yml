@@ -6,14 +6,14 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - grafana:/data
+      - ./grafana:/data
   influxdb:
     image: influxdb
     restart: always
     expose:
       - "8086"
     volumes:
-      - influxdb2:/var/lib/influxdb2
+      - ./influxdb2:/var/lib/influxdb2
     environment:
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - DOCKER_INFLUXDB_INIT_USERNAME=nodered
@@ -26,7 +26,7 @@ services:
     ports:
       - 1880:1880
     volumes:
-      - nodered:/data
+      - ./nodered:/data
 volumes:
   nodered:
     external: true
