@@ -19,7 +19,7 @@ services:
       - DOCKER_INFLUXDB_INIT_USERNAME=nodered
       - DOCKER_INFLUXDB_INIT_PASSWORD=nodered
       - DOCKER_INFLUXDB_INIT_ORG=local.docker.nodered.station
-      - DOCKER_INFLUXDB_INIT_BUCKET=station_bucker
+      - DOCKER_INFLUXDB_INIT_BUCKET=station_bucket
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token-station
   nodered:
     build: .
