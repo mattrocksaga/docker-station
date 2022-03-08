@@ -3,34 +3,38 @@ version: "3.7"
 services:
 
   node-red:
-    image: nodered/node-red:latest
+    #build: ./nodered
+    image: nodered/node-red
     environment:
       - TZ=America/Chicago
     ports:
       - "1880:1880"
     volumes:
-      - ./nodered:/data
+      - ./data-nodered:/data
 
   grafana:
     image: grafana/grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: localadmin
     restart: always
     ports:
       - 3000:3000
     volumes:
-      - ./grafana:/data
+      - ./data-grafana:/data
 
   influxdb:
     image: influxdb:2.1
     restart: always
-    expose:
-      - "8086"
+    ports:
+      - "8086:8086"
     volumes:
-      - ./influxdb2:/var/lib/influxdb2
+      - ./data-influxdb2:/var/lib/influxdb2
     environment:
       - DOCKER_INFLUXDB_INIT_MODE=setup
-      - DOCKER_INFLUXDB_INIT_USERNAME=nodered
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
       # pass minimum 8 chars
-      - DOCKER_INFLUXDB_INIT_PASSWORD=noderedstation
+      - DOCKER_INFLUXDB_INIT_PASSWORD=localadmin
       - DOCKER_INFLUXDB_INIT_ORG=local.docker.nodered.station
       - DOCKER_INFLUXDB_INIT_BUCKET=station_bucket
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token-station
