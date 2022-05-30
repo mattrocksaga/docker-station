@@ -10,7 +10,9 @@ services:
     ports:
       - 1880:1880
     volumes:
-      - ./data-nodered:/data
+      - ./data/nodered:/data
+    networks:
+      - station
 
   grafana:
     image: grafana/grafana-oss
@@ -25,8 +27,10 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./data-grafana:/data
-      - ./grafana_datasource.yml:/usr/share/grafana/conf/provisioning/datasources/grafana_datasource.yml
+      - ./data/grafana:/data
+      - ./grafana/grafana_datasource.yml:/usr/share/grafana/conf/provisioning/datasources/grafana_datasource.yml
+    networks:
+      - station
 
   influxdb:
     image: influxdb:2.1
@@ -34,15 +38,28 @@ services:
     ports:
       - 8086:8086
     volumes:
-      - ./data-influxdb:/var/lib/influxdb2
+      - ./data/influxdb:/var/lib/influxdb2
     environment:
-      - DOCKER_INFLUXDB_INIT_MODE=setup
-      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
       # pass minimum 8 chars
-      - DOCKER_INFLUXDB_INIT_PASSWORD=localadmin
-      - DOCKER_INFLUXDB_INIT_ORG=local.docker.nodered.station
-      - DOCKER_INFLUXDB_INIT_BUCKET=station_bucket
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token-station
+      DOCKER_INFLUXDB_INIT_PASSWORD: localadmin
+      DOCKER_INFLUXDB_INIT_ORG: local.docker.nodered.station
+      DOCKER_INFLUXDB_INIT_BUCKET: station_bucket
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: my-super-secret-auth-token-station
+    networks:
+      - station
+
+  telegraf:
+    image: telegraf:latest
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf
+    networks:
+      - station
+    environment:
+      INFLUXDB2_TOKEN: my-super-secret-auth-token-station
+      INFLUXDB2_ORGANIZATION: local.docker.nodered.station
+      INFLUXDB2_BUCKET: telegraf_bucket
 
 volumes:
   nodered:
@@ -51,3 +68,6 @@ volumes:
     external: true
   influxdb2:
     external: true
+
+networks:
+  station:
