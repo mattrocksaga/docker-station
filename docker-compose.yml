@@ -54,6 +54,7 @@ services:
     image: telegraf:latest
     volumes:
       - ./telegraf.conf:/etc/telegraf/telegraf.conf
+      - ./data/telegraf/telegraf.d://etc/telegraf/telegraf.d
     networks:
       - station
     environment:
