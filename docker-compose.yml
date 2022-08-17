@@ -13,6 +13,7 @@ services:
       - ./data/nodered:/data
     networks:
       - station
+    restart: always
 
   grafana:
     image: grafana/grafana-oss
@@ -31,6 +32,7 @@ services:
       - ./grafana/grafana_datasource.yml:/usr/share/grafana/conf/provisioning/datasources/grafana_datasource.yml
     networks:
       - station
+    restart: always
 
   influxdb:
     image: influxdb:2.1
@@ -49,6 +51,7 @@ services:
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: my-super-secret-auth-token-station
     networks:
       - station
+    restart: always
 
   telegraf:
     image: telegraf:latest
@@ -61,6 +64,7 @@ services:
       INFLUXDB2_TOKEN: my-super-secret-auth-token-station
       INFLUXDB2_ORGANIZATION: local.docker.nodered.station
       INFLUXDB2_BUCKET: telegraf_bucket
+    restart: always
 
 volumes:
   nodered:
