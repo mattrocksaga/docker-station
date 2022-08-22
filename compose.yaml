@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+
+  node-red:
+    image: nodered/node-red
+    environment:
+      - TZ=America/Chicago
+    ports:
+      - 1880:1880
+# ETC EOS UDP in
+      - 4712:4712/udp
+    volumes:
+      - ./data/nodered:/data
+    networks:
+      - station
+    restart: always
+
+  mqtt:
+    image: eclipse-mosquitto
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./data:/mosquitto/data
+    networks:
+      - station
+    restart: always
+
+volumes:
+  nodered:
+    external: true
+  mqtt:
+    external: true
+
+networks:
+  station:
