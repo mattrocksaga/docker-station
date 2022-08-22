@@ -3,14 +3,14 @@ version: "3.7"
 services:
 
   node-red:
-    #build: ./nodered
-    image: nodered/node-red
+    build: ./nodered
+    # image: nodered/node-red
     environment:
       - TZ=America/Chicago
     ports:
       - 1880:1880
-    volumes:
-      - ./data/nodered:/data
+    # volumes:
+      # - ./data/nodered:/data
     networks:
       - station
 

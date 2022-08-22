@@ -1,0 +1,12 @@
+{
+    "name": "node-red-station",
+    "description": "A Node-RED Project",
+    "version": "0.0.2",
+    "private": true,
+    "scripts": {
+        "start": "node $NODE_OPTIONS node_modules/node-red/red.js $FLOWS"
+    },
+    "dependencies": {
+        "node-red-contrib-redis": "~1.3.9"
+    }
+}
