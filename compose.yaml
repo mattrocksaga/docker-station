@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3"
 
 services:
 
@@ -8,8 +8,8 @@ services:
       - TZ=America/Chicago
     ports:
       - 1880:1880
-# ETC EOS UDP in
-      - 4712:4712/udp
+# UDP in
+      # - 4712:4712/udp
     volumes:
       - ./data/nodered:/data
     networks:
@@ -28,10 +28,64 @@ services:
       - station
     restart: always
 
+  grafana:
+    image: grafana/grafana-oss
+    environment:
+#      GF_DEFAULT_INSTANCE_NAME: docker-station
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: localadmin
+#      GF_DATE_FORMATS_DEFAULT_TIMEZONE: America/Chicago
+      GF_AUTH_ANONYMOUS_ORG_NAME: docker-station
+      GF_PATHS_DATA: /data
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ./data/grafana:/data
+      # - ./grafana/grafana_datasource.yml:/usr/share/grafana/conf/provisioning/datasources/grafana_datasource.yml
+    networks:
+      - station
+
+  influxdb:
+    image: influxdb:2.1
+    restart: always
+    ports:
+      - 8086:8086
+    volumes:
+      - ./data/influxdb:/var/lib/influxdb2
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      # pass minimum 8 chars
+      DOCKER_INFLUXDB_INIT_PASSWORD: localadmin
+      DOCKER_INFLUXDB_INIT_ORG: local.docker.nodered.station
+      DOCKER_INFLUXDB_INIT_BUCKET: station_bucket
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: my-super-secret-auth-token-station
+    networks:
+      - station
+
+  telegraf:
+    image: telegraf:latest
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf
+      - ./data/telegraf/telegraf.d://etc/telegraf/telegraf.d
+    networks:
+      - station
+    environment:
+      INFLUXDB2_TOKEN: my-super-secret-auth-token-station
+      INFLUXDB2_ORGANIZATION: local.docker.nodered.station
+      INFLUXDB2_BUCKET: telegraf_bucket
+
 volumes:
   nodered:
     external: true
   mqtt:
+    external: true
+  grafana:
+    external: true
+  influxdb:
+    external: true
+  telegraf:
     external: true
 
 networks:
