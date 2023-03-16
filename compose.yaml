@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3"
 
 services:
 
@@ -8,8 +8,6 @@ services:
       - TZ=America/Chicago
     ports:
       - 1880:1880
-# ETC EOS UDP in
-      - 4712:4712/udp
     volumes:
       - ./data/nodered:/data
     networks:

@@ -1,6 +1,6 @@
 {
     "name": "node-red-project",
-    "description": "Matt's Node-RED Project",
+    "description": "MattRock's Node-RED Station",
     "version": "0.0.1",
     "private": true,
     "dependencies": {
